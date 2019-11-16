@@ -1,0 +1,51 @@
+mutation {
+  test1:createChannel(data:{
+    name: "Test1"
+    owner: {
+      create:{
+        name: "Shashwat"
+        email: "shashwat@gm.com"
+        password: "$2b$10$dqyYw5XovLjpmkYNiRDEWuwKaRAvLaG45fnXE5b3KTccKZcRPka2m"
+        isVerified:true
+      }
+    }
+    messages: {
+      create: [
+        {
+        	text: "Test message 1"
+          sender:{
+            connect:{
+              email: "shashwat@gm.com"
+            }
+          }
+        }
+      	{
+        	text: "Test message 2"
+          sender: {
+            connect: {
+              email: "user1@email.com"
+            }
+          }
+      	}
+      ]
+    }
+    members: {
+      create: [{
+        name: "User1"
+        email: "user1@email.com"
+        password:"$2b$10$dqyYw5XovLjpmkYNiRDEWuwKaRAvLaG45fnXE5b3KTccKZcRPka2m"
+      }
+      {
+        name: "user2"
+        email:"user2@email.com"
+        password: "$2b$10$dqyYw5XovLjpmkYNiRDEWuwKaRAvLaG45fnXE5b3KTccKZcRPka2m"
+      }]
+      connect:{
+        email: "shashwat@gm.com"
+      }
+    }
+  }) {
+    id
+    name
+  }
+}

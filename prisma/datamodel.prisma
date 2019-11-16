@@ -1,0 +1,40 @@
+type User {
+  id: ID! @id
+  email: String! @unique
+  password: String!
+  name: String!
+  isVerified: Boolean
+  passwordResetToken: String @unique
+  passwordResetTokenExpires: DateTime
+  emailConfirmationToken: String @unique
+  emailConfirmationTokenExpires: DateTime
+}
+
+type Message {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime @updatedAt
+  sender: User! @relation(name: "Sender", link: INLINE)
+  receiver: Channel! @relation(name: "Receiver", link: INLINE)
+  edited: Boolean @default(value: false)
+  deleted: Boolean @default(value: false)
+  text: String!
+  metaData: MetaData
+}
+
+type MetaData {
+  id: ID! @id
+  title: String
+  image: String
+  author: String
+  description: String
+}
+
+type Channel {
+  id: ID! @id
+  name: String
+  members: [User!]! @relation(name: "ChannelMembers", link: TABLE)
+  owner: User! @relation(name: "ChannelOwner", link: INLINE)
+  is_private: Boolean! @default(value: false)
+  deleted: Boolean! @default(value: false)
+}

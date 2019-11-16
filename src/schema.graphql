@@ -1,0 +1,94 @@
+type Query {
+  me: User
+  channels: [Channel!]!
+  users: [User!]!
+  advancedSearch(searchParams: SearchMessageInput!): [Message!]!
+}
+
+input SearchMessageInput {
+  text_contains: String
+  channelId: ID
+  senderId: ID
+}
+
+scalar Upload
+
+type Mutation {
+  signup(email: String!, password: String!, name: String!): AuthPayload!
+  login(email: String!, password: String!): AuthPayload!
+  verifyEmail(token: String!): StatusResponse!
+  forgotPassword(email: String!): StatusResponse!
+  resetPassword(token: String!, password: String!): StatusResponse!
+  sendMessage(channelId: ID!, text: String!, attachment: Upload): Message!
+  editMessage(id: ID!, editedText: String!): Message!
+  deleteMessage(id: ID!): StatusResponse!
+  createChannel(name: String!, memberIds: [ID!]!, is_private: Boolean!): Channel!
+  kickUsers(channelId: ID!, userIds: ID!): StatusResponse!
+  enterChannel(channelId: ID!): StatusResponse!
+  exitChannel(channelId: ID!): StatusResponse!
+  inviteUsers(channelId: ID!, userIds: ID!): StatusResponse!
+  editUserDetails(name: String, email: String): User!
+  deleteUser: StatusResponse!
+  deleteChannel(channelId: ID!): StatusResponse!
+}
+
+type Subscription {
+  messages: Message!
+}
+
+type me {
+  name: String!
+  email: String!
+  my_channels: [Channel!]!
+}
+
+type StatusResponse {
+  success: Boolean!
+  message: String
+  errors: [Error!]
+}
+
+type Channel {
+  id: ID!
+  name: String!
+  members: [User!]!
+  messages: [Message!]!
+  owner: User
+  is_private: Boolean!
+}
+
+type AuthPayload {
+  user: User!
+  message: String!
+}
+
+type User {
+  id: ID!
+  email: String!
+  name: String!
+  isVerified: Boolean
+}
+
+type Message {
+  id: ID!
+  sender: User
+  receiver: Channel
+  edited: Boolean
+  createdAt: String!
+  updatedAt: String
+  text: String!
+  metaData: MetaData
+}
+
+type MetaData {
+  id: ID!
+  title: String
+  image: String
+  author: String
+  description: String
+}
+
+type Error {
+  path: String!
+  message: String
+}
